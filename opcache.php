@@ -54,7 +54,7 @@ function size_for_humans($bytes)
     <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#navbar-opcache">
-    <a href="https://github.com/carlosbuenosvinos/opcache-dashboard"><img style="position: absolute; top: 50px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+    <a href="https://github.com/you"><img style="position: absolute; top: 50px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
     <nav id="navbar-opcache" class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -107,7 +107,7 @@ function size_for_humans($bytes)
         $wastedMemory = $mem['wasted_memory'];
         ?>
 
-        <h2 id="memory">Memory: <?= size_for_humans($totalMemory) ?></h2>
+        <h2 id="memory">Memory: <?= size_for_humans($wastedMemory + $usedMemory) ?> of <?= size_for_humans($totalMemory) ?></h2>
         <div class="progress progress-striped">
             <div class="progress-bar progress-bar-danger" style="width: <?= round(($wastedMemory / $totalMemory) * 100, 0) ?>%">
                 <span class="sr-only">Wasted memory</span>
@@ -125,7 +125,7 @@ function size_for_humans($bytes)
         $usedKeys = $stats['num_cached_keys'];
         $freeKeys = $totalKeys - $usedKeys;
         ?>
-        <h2 id="keys">Keys: <?= $totalKeys ?></h2>
+        <h2 id="keys">Keys: <?= $usedKeys ?> of <?= $totalKeys ?></h2>
         <div class="progress progress-striped">
             <div class="progress-bar progress-bar-warning" style="width: <?= round(($usedKeys / $totalKeys) * 100, 0) ?>%">
                 <span class="sr-only">Used keys</span>
@@ -179,7 +179,7 @@ function size_for_humans($bytes)
             <tr>
                 <th>Options</th>
                 <th>Hits</th>
-                <th>Memory (Kb)</th>
+                <th>Memory</th>
                 <th>Path</th>
             </tr>
             <?php
