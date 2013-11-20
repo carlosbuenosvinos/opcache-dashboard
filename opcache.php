@@ -29,6 +29,63 @@ function size_for_humans($bytes)
         return sprintf("%d&nbsp;bytes", $bytes);
     }
 }
+
+function getOffsetWhereStringsAreEqual($a, $b)
+{
+    $i = 0;
+    while (strlen($a) && strlen($b) && $a{$i} === $b{$i} && strlen($a) > $i) {
+        $i++;
+    }
+
+    return $i;
+}
+
+function getSuggestionMessage($property, $value)
+{
+    switch ($property) {
+        case 'opcache_enabled':
+            return $value ? '' : '<span class="glyphicon glyphicon-search"></span> You should enabled opcache';
+            break;
+        case 'cache_full':
+            return $value ? '<span class="glyphicon glyphicon-search"></span> You should increase opcache.memory_consumption' : '';
+            break;
+        case 'opcache.validate_timestamps':
+            return $value ? '<span class="glyphicon glyphicon-search"></span> If you are in a production environment you should disabled it' : '';
+            break;
+    }
+
+    return '';
+}
+
+function getStringFromPropertyAndValue($property, $value)
+{
+    if ($value === false) {
+        return 'false';
+    }
+
+    if ($value === true) {
+        return 'true';
+    }
+
+    switch ($property) {
+        case 'used_memory':
+        case 'free_memory':
+        case 'wasted_memory':
+        case 'opcache.memory_consumption':
+            return size_for_humans($value);
+            break;
+        case 'current_wasted_percentage':
+        case 'opcache_hit_rate':
+            return number_format($value, 2).'%';
+            break;
+        case 'blacklist_miss_ratio':
+            return number_format($value, 2);
+            break;
+    }
+
+    return $value;
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -137,24 +194,25 @@ function size_for_humans($bytes)
 
         <h2 id="status">Status</h2>
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped table-hover">
                 <?php
                 foreach ($status as $key => $value) {
-                    if ($key == 'scripts') continue;
+                    if ($key == 'scripts') {
+                        continue;
+                    }
+
                     if (is_array($value)) {
                         foreach ($value as $k => $v) {
-                            if($v === false) $value = "false";
-                            if($v === true) $value = "true";
-                            if($k == 'used_memory' || $k == 'free_memory' || $k == 'wasted_memory') $v = size_for_humans($v);
-                            if($k == 'current_wasted_percentage' || $k == 'opcache_hit_rate') $v = number_format($v,2).'%';
-                            if($k == 'blacklist_miss_ratio') $v = number_format($v,2);
-                            echo "<tr><th align=\"left\">$k</th><td align=\"right\">$v</td></tr>\n";
+                            $v = getStringFromPropertyAndValue($k, $v);
+                            $m = getSuggestionMessage($k, $v);
+                            ?><tr class="<?= $mess ? 'danger' : '' ?>"><th align="left"><?= $k ?></th><td align="right"><?= $v ?></td><td><?= $m ?></td></tr><?php
                         }
                         continue;
                     }
-                    if($value===false) $value = "false";
-                    if($value===true) $value = "true";
-                    echo "<tr><th align=\"left\">$key</th><td align=\"right\">$value</td></tr>\n";
+
+                    $mess = getSuggestionMessage($key, $value);
+                    $value = getStringFromPropertyAndValue($key, $value);
+                    ?><tr class="<?= $mess ? 'danger' : '' ?>"><th align="left"><?= $key ?></th><td align="right"><?= $value ?></td><td><?= $mess ?></td></tr><?php
                 }
                 ?>
             </table>
@@ -162,20 +220,21 @@ function size_for_humans($bytes)
 
         <h2 id="configuration">Configuration</h2>
         <div class="table-responsive">
-        <table class="table table-striped">
-            <?php
-            foreach ($config['directives'] as $key=>$value) {
-                if ($value === false) $value = "false";
-                if ($value === true) $value = "true";
-                if ($key == 'opcache.memory_consumption') $value = size_for_humans($value);
-                echo "<tr><th align=\"left\">$key</th><td align=\"right\">$value</td></tr>\n";
-            }
-            ?>
-        </table>
+            <table class="table table-striped table-hover">
+                <?php foreach ($config['directives'] as $key => $value) {
+                    $mess = getSuggestionMessage($key, $value);
+                    ?>
+                <tr class="<?= $mess ? 'danger' : '' ?>" >
+                    <th align="left"><?= $key ?></th>
+                    <td align="right"><?= getStringFromPropertyAndValue($key, $value) ?></td>
+                    <td align="left"><?= $mess ?></td>
+                </tr>
+                <?php } ?>
+            </table>
         </div>
 
         <h2 id="scripts">Scripts (<?= count($status["scripts"]) ?> - <a href="?reset">Reset all</a>)</h2>
-        <table class="table table-striped">
+        <table class="table table-striped table-hover">
             <tr>
                 <th>Options</th>
                 <th>Hits</th>
@@ -183,18 +242,30 @@ function size_for_humans($bytes)
                 <th>Path</th>
             </tr>
             <?php
-            usort($status['scripts'], function ($a, $b) { return $a['hits'] < $b ['hits']; });
+            uasort($status['scripts'], function ($a, $b) { return $a['hits'] < $b ['hits']; });
+
+            $offset = null;
+            $previousKey = null;
             foreach ($status['scripts'] as $key => $data) {
-                ?>
+                $offset = min(
+                    getOffsetWhereStringsAreEqual(
+                        (null === $previousKey) ? $key : $previousKey,
+                        $key
+                    ),
+                    (null === $offset) ? strlen($key) : $offset
+                );
+                $previousKey = $key;
+            }
+
+            foreach ($status['scripts'] as $key => $data) {
+               ?>
                 <tr>
                     <td><a href="?invalidate=<?= $data['full_path'] ?>">Invalidate</a></td>
                     <td><?= $data['hits'] ?></td>
                     <td><?= size_for_humans($data['memory_consumption']) ?></td>
-                    <td><?= $data['full_path'] ?></td>
+                    <td><?= substr($data['full_path'], $offset - 1) ?></td>
                 </tr>
-                <?php
-            }
-            ?>
+            <?php } ?>
         </table>
     </div>
 
