@@ -1,4 +1,4 @@
-OPcache Dashboard
+OPCache Dashboard
 =================
 Set up properly and monitor your Zend OPcache with this dashboard that will help you checking memory, hits and status, configuring for optimal performance (warning you when cache full, validation, etc.) and reseting one or all scripts with one click.
 
