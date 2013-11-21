@@ -1,7 +1,6 @@
 OPcache Dashboard
 =================
-Set up properly and monitor your Zend OPCache with this dashboard.
-Check memory, hits, status, configuration, diagnostic and reset scripts.
+Set up properly and monitor your Zend OPCache with this dashboard that will help you checking memory, hits and status, configurating for optimal performance (warning you when cache full, validation, etc.) and reseting one or all scripts with one click.
 
 Installation
 ============
@@ -9,11 +8,6 @@ Just copy and paste ```opcache.php``` anywhere in your public folder. You can us
 ```wget https://raw.github.com/carlosbuenosvinos/opcache-dashboard/master/opcache.php```
 
 Try to keep it safe for non authorized users.
-
-Next steps
-==========
-I will be adding information to help to set up your opcache in your server so you don't need to read about posts around
-about how to do it.
 
 Screenshots
 ===========
