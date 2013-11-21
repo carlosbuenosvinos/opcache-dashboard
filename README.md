@@ -12,5 +12,6 @@ Try to keep it safe for non authorized users.
 Screenshots
 ===========
 ![Main page](https://raw.github.com/carlosbuenosvinos/opcache-dashboard/master/thumbnail-1.png)
-![Configuration](https://raw.github.com/carlosbuenosvinos/opcache-dashboard/master/thumbnail-2.png)
-![Scripts](https://raw.github.com/carlosbuenosvinos/opcache-dashboard/master/thumbnail-3.png)
+![Status](https://raw.github.com/carlosbuenosvinos/opcache-dashboard/master/thumbnail-2.png)
+![Configuration](https://raw.github.com/carlosbuenosvinos/opcache-dashboard/master/thumbnail-3.png)
+![Scripts](https://raw.github.com/carlosbuenosvinos/opcache-dashboard/master/thumbnail-4.png)
