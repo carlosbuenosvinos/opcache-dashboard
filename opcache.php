@@ -205,7 +205,7 @@ function getStringFromPropertyAndValue($property, $value)
                         foreach ($value as $k => $v) {
                             $v = getStringFromPropertyAndValue($k, $v);
                             $m = getSuggestionMessage($k, $v);
-                            ?><tr class="<?= $mess ? 'danger' : '' ?>"><th align="left"><?= $k ?></th><td align="right"><?= $v ?></td><td><?= $m ?></td></tr><?php
+                            ?><tr class="<?= $m ? 'danger' : '' ?>"><th align="left"><?= $k ?></th><td align="right"><?= $v ?></td><td><?= $m ?></td></tr><?php
                         }
                         continue;
                     }
