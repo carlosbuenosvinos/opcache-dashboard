@@ -234,7 +234,7 @@ function getStringFromPropertyAndValue($property, $value)
         </div>
 
         <h2 id="scripts">Scripts (<?= count($status["scripts"]) ?> - <a href="?reset">Reset all</a>)</h2>
-        <table class="table table-striped table-hover">
+        <table class="table table-striped">
             <tr>
                 <th>Options</th>
                 <th>Hits</th>
