@@ -33,7 +33,7 @@ function size_for_humans($bytes)
 function getOffsetWhereStringsAreEqual($a, $b)
 {
     $i = 0;
-    while (strlen($a) && strlen($b) && $a{$i} === $b{$i} && strlen($a) > $i) {
+    while (strlen($a) && strlen($b) && strlen($a) > $i && $a{$i} === $b{$i}) {
         $i++;
     }
 
