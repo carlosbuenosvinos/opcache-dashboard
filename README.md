@@ -4,10 +4,17 @@ Set up properly and monitor your Zend OPcache with this dashboard that will help
 
 Installation
 ============
-Just copy and paste ```opcache.php``` anywhere in your public folder. You can use something such as:
+
+Composer installation:
+```
+composer require carlos-buenosvinos/opcache-dashboard
+```
+Then you can symlink it to your public folder or require it from another php file.
+
+Or just copy and paste ```opcache.php``` anywhere in your public folder. You can use something such as:
 ```wget https://raw.github.com/carlosbuenosvinos/opcache-dashboard/master/opcache.php```
 
-Try to keep it safe for non authorized users.
+**Try to keep it safe for non authorized users.**
 
 Screenshots
 ===========
