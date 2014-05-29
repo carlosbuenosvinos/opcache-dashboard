@@ -7,7 +7,7 @@ Installation
 
 Composer installation:
 ```
-composer require carlos-buenosvinos/opcache-dashboard
+composer require carlosio/opcache-dashboard
 ```
 Then you can symlink it to your public folder or require it from another php file.
 
