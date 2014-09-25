@@ -92,7 +92,7 @@ function getStringFromPropertyAndValue($property, $value)
 <head>
     <title>OPcache Dashboard - Carlos Buenosvinos (@buenosvinos)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="http://www.php.net/favicon.ico">
+    <link rel="shortcut icon" href="//www.php.net/favicon.ico">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { padding-top: 70px; }
