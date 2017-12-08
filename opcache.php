@@ -1,7 +1,18 @@
 <?php
+
+// Authentication
+$token = filter_input(INPUT_GET, 'token');
+if (dashboardIsSecure()) {
+    if ($token !== getenv('OPCACHE_DASHBOARD_TOKEN')) {
+        header('HTTP/1.0 403 Forbidden');
+        echo sprintf('Invalid token : %s', $token);
+        exit;
+    }
+}
+
 if (isset($_GET['invalidate'])) {
     opcache_invalidate($_GET['invalidate'], true);
-    header('Location: ' . $_SERVER['PHP_SELF'].'#scripts');
+    header('Location: ' . $_SERVER['PHP_SELF'].sprintf('?token=%s#scripts', $token));
 }
 
 if (isset($_GET['reset'])) {
@@ -9,7 +20,7 @@ if (isset($_GET['reset'])) {
     header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
     header('Cache-Control: post-check=0, pre-check=0', false);
     header('Pragma: no-cache');
-    header('Location: ' . $_SERVER['PHP_SELF'].'#scripts');
+    header('Location: ' . $_SERVER['PHP_SELF'].sprintf('?token=%s#scripts', $token));
 }
 
 /**
@@ -55,6 +66,13 @@ function getSuggestionMessage($property, $value)
         case 'opcache.validate_timestamps':
             return $value ? '<span class="glyphicon glyphicon-search"></span> If you are in a production environment you should disabled it' : '';
             break;
+        case 'dashboard_secure':
+            return $value ? sprintf(
+                '<span class="glyphicon glyphicon-warning-sign"></span> OPCACHE_DASHBOARD_TOKEN environment variable is not defined : access to OPcache Dashboard at %s%s access is not restricted',
+                $_SERVER['HTTP_HOST'],
+                $_SERVER['PHP_SELF']
+            ) : '';
+            break;
     }
 
     return '';
@@ -87,6 +105,16 @@ function getStringFromPropertyAndValue($property, $value)
     }
 
     return $value;
+}
+
+/**
+ * Checks if token authentication is activated.
+ *
+ * @return bool
+ */
+function dashboardIsSecure()
+{
+    return getenv('OPCACHE_DASHBOARD_TOKEN') !== false;
 }
 
 ?>
@@ -139,6 +167,12 @@ function getStringFromPropertyAndValue($property, $value)
 </nav>
 
 <div class="container">
+    <?php if (dashboardIsSecure() === false): ?>
+    <div class="alert alert-danger" role="alert">
+        <?php echo getSuggestionMessage('dashboard_secure', true); ?>
+    </div>
+    <?php endif ?>
+
     <div class="jumbotron">
         <h1>OPcache Dashboard</h1>
         <h2>by Carlos Buenosvinos (<a href="https://twitter.com/buenosvinos">@buenosvinos</a>)</h2>
@@ -236,7 +270,7 @@ function getStringFromPropertyAndValue($property, $value)
         </table>
     </div>
 
-    <h2 id="scripts">Scripts (<?= count($status["scripts"]) ?>) <a type="button" class="btn btn-success" href="?reset">Reset all</a></h2>
+    <h2 id="scripts">Scripts (<?= count($status["scripts"]) ?>) <a type="button" class="btn btn-success" href="?reset&token=<?php echo $token ?>">Reset all</a></h2>
     <table class="table table-striped">
         <tr>
             <th>Options</th>
@@ -263,7 +297,7 @@ function getStringFromPropertyAndValue($property, $value)
         foreach ($status['scripts'] as $key => $data) {
             ?>
             <tr>
-                <td><a href="?invalidate=<?= $data['full_path'] ?>">Invalidate</a></td>
+                <td><a href="?invalidate=<?= $data['full_path'] ?>&token=<?php echo $token ?>">Invalidate</a></td>
                 <td><?= $data['hits'] ?></td>
                 <td><?= size_for_humans($data['memory_consumption']) ?></td>
                 <td><?= substr($data['full_path'], $offset - 1) ?></td>
