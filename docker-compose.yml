@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        OPCACHE_DASHBOARD_PHP_VERSION: ${OPCACHE_DASHBOARD_PHP_VERSION-7.2}
+    image: opcache:php-${OPCACHE_DASHBOARD_PHP_VERSION-7.2}
+    volumes:
+      - ./opcache.php:/var/www/html/opcache.php
+    ports:
+      - ${OPCACHE_DASHBOARD_PORT-8000}:80

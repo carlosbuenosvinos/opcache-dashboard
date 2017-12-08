@@ -16,6 +16,17 @@ Or just copy and paste ```opcache.php``` anywhere in your public folder. You can
 
 **Try to keep it safe for non authorized users.**
 
+Development
+===========
+
+Run `docker-compose up` in project root directory. OPcache dashboard is available at http://localhost:8000/opcache.php
+
+Start coding :)
+
+The docker container configuration can be altered at build time using the following environment variables :
+
+- `OPCACHE_DASHBOARD_PHP_VERSION` : PHP version to be installed in the container. Supported versions are listed on [PHP's Docker image page](https://store.docker.com/images/php) (`*-apache` images are supported)
+
 Screenshots
 ===========
 ![Main page](https://raw.github.com/carlosbuenosvinos/opcache-dashboard/master/thumbnail-1.png)
