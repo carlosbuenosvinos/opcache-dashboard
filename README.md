@@ -14,7 +14,21 @@ Then you can symlink it to your public folder or require it from another php fil
 Or just copy and paste ```opcache.php``` anywhere in your public folder. You can use something such as:
 ```wget https://raw.github.com/carlosbuenosvinos/opcache-dashboard/master/opcache.php```
 
-**Try to keep it safe for non authorized users.**
+Authentication
+==============
+
+It is possible to restrict access to the dashboard using a request token.
+To do so define the `OPCACHE_DASHBOARD_TOKEN` environment variable.
+
+Further requests to the dashboard will require the `token` query parameter value to match the environment variable value.
+
+Apache configuration example :
+
+```
+SetEnv OPCACHE_DASHBOARD_TOKEN my_secret_token
+```
+
+This configuration will restrict dashboard access unless the token parameter is correctly set : `opcache.php?token=my_secret_token`
 
 Screenshots
 ===========
