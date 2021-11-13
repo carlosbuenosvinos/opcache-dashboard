@@ -272,7 +272,7 @@ function getStringFromPropertyAndValue($property, $value)
     </table>
 </div>
 
-<script src="//code.jquery.com/jquery.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 </body>
 </html>
