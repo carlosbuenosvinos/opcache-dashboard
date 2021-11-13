@@ -1,5 +1,7 @@
 OPcache Dashboard
 =================
+This fork of OPcache Dashboard is fully PHP 8.0.x compatible.
+
 Set up properly and monitor your Zend OPcache with this dashboard that will help you checking memory, hits and status, configuring for optimal performance (warning you when cache full, validation, etc.) and reseting one or all scripts with one click.
 
 Installation

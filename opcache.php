@@ -36,7 +36,7 @@ function size_for_humans($bytes)
 function getOffsetWhereStringsAreEqual($a, $b)
 {
     $i = 0;
-    while (strlen($a) && strlen($b) && strlen($a) > $i && $a{$i} === $b{$i}) {
+    while (strlen($a) && strlen($b) && strlen($a) > $i && $a[$i] === $b[$i]) {
         $i++;
     }
 
@@ -245,7 +245,7 @@ function getStringFromPropertyAndValue($property, $value)
             <th>Path</th>
         </tr>
         <?php
-        uasort($status['scripts'], function ($a, $b) { return $a['hits'] < $b ['hits']; });
+        uasort($status['scripts'], function ($a, $b) { return $b['hits'] <=> $a ['hits']; });
 
         $offset = null;
         $previousKey = null;
@@ -272,7 +272,7 @@ function getStringFromPropertyAndValue($property, $value)
     </table>
 </div>
 
-<script src="//code.jquery.com/jquery.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 </body>
 </html>
