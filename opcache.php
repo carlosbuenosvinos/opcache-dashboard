@@ -245,7 +245,7 @@ function getStringFromPropertyAndValue($property, $value)
             <th>Path</th>
         </tr>
         <?php
-        uasort($status['scripts'], function ($a, $b) { return $a['hits'] < $b ['hits']; });
+        uasort($status['scripts'], function ($a, $b) { return $b['hits'] <=> $a ['hits']; });
 
         $offset = null;
         $previousKey = null;
